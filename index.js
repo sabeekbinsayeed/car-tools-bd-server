@@ -46,7 +46,7 @@ function verifyJWT(req, res, next) {
 
 async function run() {
     try {
-        await client.connect();
+        client.connect();
         const toolsCollection = client.db("manufacturer").collection("tools");
         const purchaseCollection = client.db("manufacturer").collection("purchase");
         const paymentCollection = client.db("manufacturer").collection("payment");
@@ -65,11 +65,17 @@ async function run() {
                 console.log('admin e error hosce solved')
             }
         }
+
         app.get('/tools', async (req, res) => {
-            const query = {};
-            const cursor = toolsCollection.find(query);
-            const tools = await cursor.toArray();
-            res.send(tools);
+            try {
+                const query = {};
+                const cursor = toolsCollection.find(query);
+                const tools = await cursor.toArray();
+                res.send(tools);
+            }
+            catch (err) {
+                res.send({ error: 'error happened' })
+            }
         });
 
 
